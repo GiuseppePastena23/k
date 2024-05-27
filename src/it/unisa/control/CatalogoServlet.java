@@ -26,7 +26,20 @@ public class CatalogoServlet extends HttpServlet {
 		ProdottoBean bean = new ProdottoBean();
 		String sort = request.getParameter("sort");
 		String action = request.getParameter("action");
-		String redirectedPage = request.getParameter("page");;
+		String redirectedPage = request.getParameter("page");
+		List<String> validPages = Arrays.asList("Account.jsp", "Carrello.jsp", "Catalogo.jsp", "Checkout.jsp", "ComposizioneOrdine.jsp", "Dettagli.jsp", "Home.jsp", "Login.jsp", "MieiOrdini.jsp", "Ps4.jsp", "Ps5.jsp", "Registrazione.jsp", "Switch.jsp", "XboxOne.jsp", "XboxSeries.jsp");
+		  if (!validPages.contains(redirectedPage)) { 
+		   redirectedPage = "Home.jsp"; 
+		  }
+		
+		
+		if (validPages.contains(redirectedPage)) {
+		    // Forward to the valid page
+		    request.getRequestDispatcher("/" + redirectedPage).forward(request, response);
+		} else {
+		    // Handle invalid page request
+		    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");
+		}
 	
 		try {
 			if(action!=null) {

@@ -32,7 +32,10 @@ public class CarrelloServlet extends HttpServlet{
 		String action = request.getParameter("action");
 		String quantità = request.getParameter("qnt");
 		String redirectedPage = request.getParameter("page");
-		
+		 List<String> validPages = Arrays.asList("Account.jsp", "Carrello.jsp", "Catalogo.jsp", "Checkout.jsp", "ComposizioneOrdine.jsp", "Dettagli.jsp", "Home.jsp", "Login.jsp", "MieiOrdini.jsp", "Ps4.jsp", "Ps5.jsp", "Registrazione.jsp", "Switch.jsp", "XboxOne.jsp", "XboxSeries.jsp");
+		  if (!validPages.contains(redirectedPage)) { 
+		   redirectedPage = "Home.jsp"; 
+		  }
 		
 		try {
 			if (action != null) {
