@@ -31,6 +31,19 @@ public class UserDao implements UserDaoInterfaccia {
 	
 	private static final String TABLE_NAME = "cliente";
 	
+	private String hashPassword(String password) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hash = digest.digest(password.getBytes());
+        
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hash) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+        
+        return hexString.toString();
+    }
 	
 	@Override
 	public synchronized void doSave(UserBean user) throws SQLException {
@@ -44,11 +57,12 @@ public class UserDao implements UserDaoInterfaccia {
 		try {
 			connection = ds.getConnection();
 			connection.setAutoCommit(false);
+			String hashedPassword = hashPassword(user.getPassword());
 			preparedStatement = connection.prepareStatement(insertSQL);
 			preparedStatement.setString(1, user.getNome());
 			preparedStatement.setString(2, user.getCognome());
 			preparedStatement.setString(3, user.getUsername());
-			preparedStatement.setString(4, user.getPassword());
+			preparedStatement.setString(4, hashedPassword));
 			preparedStatement.setString(5, user.getEmail());
 			preparedStatement.setDate(6, (Date) user.getDataDiNascita());
 			preparedStatement.setString(7, user.getCartaDiCredito());
